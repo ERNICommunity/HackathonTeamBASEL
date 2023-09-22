@@ -42,6 +42,7 @@ def on_message(client, userdata, msg):
 px = Picarx()
 px_lock = Lock()
 tts_robot = TTS()
+Vilib.detect_obj_parameter['setting_resolution'] = (640, 480)
 Vilib.camera_start(vflip=False,hflip=False)
 Vilib.display(local=False,web=True)
 
