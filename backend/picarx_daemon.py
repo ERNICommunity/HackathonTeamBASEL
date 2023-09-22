@@ -6,6 +6,8 @@ import paho.mqtt.client as mqtt
 import json
 from threading import Lock
 
+last_command = 0
+
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
@@ -16,24 +18,23 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    message_text = str(msg.payload.decode('utf-8'));
+    message_text = str(msg.payload.decode('utf-8'))
     print( msg.topic + " " + message_text)
     commands = json.loads( msg.payload.decode('utf-8'))
 
     with px_lock:
+        global last_command
         for command in commands:
             operation = command['operation']
 
-            if  operation == 'set_speed':
+            if operation == 'set_speed':
                 cmd_set_speed( command)
+                last_command = time.time()
             elif operation == 'stop':
-                cmd_stop( command)
+                cmd_stop()
             elif operation == 'set_direction':
                 cmd_set_direction( command)
-            elif operation == 'set_head_rotate':
-                cmd_set_head_rotate( command)
-            elif operation == 'set_head_tilt':
-                cmd_set_head_tilt( command)
+                last_command = time.time()
             elif operation == 'say':
                 cmd_say( command)
             else:
@@ -56,19 +57,6 @@ def cmd_say( command):
 
     tts_robot.say( text)
 
-
-def cmd_set_head_tilt( cmd):
-    angle = cmd['angle']
-
-    if( -45 < angle & angle < 45):
-        px.set_camera_servo2_angle( angle)
-
-def cmd_set_head_rotate( cmd):
-    angle = cmd['angle']
-
-    if( -45 < angle & angle < 45):
-        px.set_camera_servo1_angle( angle)
-
 def cmd_set_speed( cmd):
     speed = cmd['speed']
 
@@ -79,7 +67,7 @@ def cmd_set_speed( cmd):
     else:
         px.stop()
 
-def cmd_stop( cmd):
+def cmd_stop():
     px.stop()
 
 def cmd_set_direction( cmd):
@@ -109,5 +97,8 @@ while True:
     }
 
     client2.publish( "state", json.dumps( event))
+
+    if time.time() - last_command > 3000:
+        cmd_stop()
 
     time.sleep( 0.2)
