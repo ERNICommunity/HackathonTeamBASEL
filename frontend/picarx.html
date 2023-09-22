@@ -58,7 +58,7 @@
             let ttsbutton = document.getElementById('ttsbutton');
 
             document.addEventListener('keydown', (event) => {
-                let operationCommand;
+                let directionCommand;
                 let SpeedCommand;
 
                 if (event.key === "ArrowUp") {
@@ -66,7 +66,7 @@
 
                     SpeedCommand = [{
                         "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
+                        "speed" : Number( 50)
                     }];
 
                     sendCommands( SpeedCommand);
@@ -75,71 +75,66 @@
 
                     SpeedCommand = [{
                         "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
+                        "speed" : Number( -50)
+                    }];
+
+                    sendCommands( SpeedCommand);
+                } else if (event.key === "w") {
+                    angle1.value = 50;
+
+                    SpeedCommand = [{
+                        "operation" : "set_speed",
+                        "speed" : Number( 100)
                     }];
 
                     sendCommands( SpeedCommand);
                 } else if (event.key === "ArrowRight") {
                     angle0.value = 30;
 
-                    operationCommand = [{
+                    directionCommand = [{
                         "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
+                        "angle" : Number( 30)
                     }];
 
-                    sendCommands( operationCommand);
+                    sendCommands( directionCommand);
                 } else if (event.key === "ArrowLeft") {
                     angle0.value = -30;
 
-                    operationCommand = [{
+                    directionCommand = [{
                         "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
+                        "angle" : Number( -30)
                     }];
 
-                    sendCommands( operationCommand);
+                    sendCommands( directionCommand);
                 }
             })
 
             document.addEventListener('keyup', (event) => {
-                let operationCommand;
-                let SpeedCommand;
+                let directionCommand = [{
+                    "operation" : "set_direction",
+                    "angle" : Number( 0)
+                }];
+
+                let SpeedCommand = [{
+                    "operation" : "set_speed",
+                    "speed" : Number( 0)
+                }];
 
                 if (event.key === "ArrowUp") {
                     angle1.value = 0;
-
-                    SpeedCommand = [{
-                        "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
-                    }];
-
+                    sendCommands( SpeedCommand);
+                } else if (event.key === "w") {
+                    angle1.value = 0;
                     sendCommands( SpeedCommand);
                 } else if (event.key === "ArrowDown") {
                     angle1.value = 0;
-
-                    SpeedCommand = [{
-                        "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
-                    }];
-
                     sendCommands( SpeedCommand);
                 } else if (event.key === "ArrowRight") {
                     angle0.value = 0;
-
-                    operationCommand = [{
-                        "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
-                    }];
-
-                    sendCommands( operationCommand);
+                    sendCommands( directionCommand);
                 } else if (event.key === "ArrowLeft") {
                     angle0.value = 0;
-
-                    operationCommand = [{
-                        "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
-                    }];
-
-                    sendCommands( operationCommand);
+                    sendCommands( directionCommand);
                 }
             })
 
