@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+	<title>B.A.S.E.L. ERNI Global Hackaton 2023 Robot Interface</title>
         <link href="styles.css" rel="stylesheet">
     </head>
     <body>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
         <script>
             // Create a client instance
-            client = new Paho.MQTT.Client( "4.221.188.68" , 1883, "webid");
+            client = new Paho.MQTT.Client( window.location.host, 9001, "webid");
 
             // set callback handlers
             client.onConnectionLost = onConnectionLost;
