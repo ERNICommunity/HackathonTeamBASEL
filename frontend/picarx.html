@@ -66,7 +66,7 @@
 
                     SpeedCommand = [{
                         "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
+                        "speed" : Number( 50)
                     }];
 
                     sendCommands( SpeedCommand);
@@ -75,7 +75,7 @@
 
                     SpeedCommand = [{
                         "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
+                        "speed" : Number( -50)
                     }];
 
                     sendCommands( SpeedCommand);
@@ -84,7 +84,7 @@
 
                     operationCommand = [{
                         "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
+                        "angle" : Number( 30)
                     }];
 
                     sendCommands( operationCommand);
@@ -93,7 +93,7 @@
 
                     operationCommand = [{
                         "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
+                        "angle" : Number( -30)
                     }];
 
                     sendCommands( operationCommand);
@@ -101,44 +101,27 @@
             })
 
             document.addEventListener('keyup', (event) => {
-                let operationCommand;
-                let SpeedCommand;
+                let operationCommand = [{
+                    "operation" : "set_direction",
+                    "angle" : Number( 0)
+                }];
+
+                let SpeedCommand = [{
+                    "operation" : "set_speed",
+                    "speed" : Number( 0)
+                }];
 
                 if (event.key === "ArrowUp") {
                     angle1.value = 0;
-
-                    SpeedCommand = [{
-                        "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
-                    }];
-
                     sendCommands( SpeedCommand);
                 } else if (event.key === "ArrowDown") {
                     angle1.value = 0;
-
-                    SpeedCommand = [{
-                        "operation" : "set_speed",
-                        "speed" : Number( angle1.value)
-                    }];
-
                     sendCommands( SpeedCommand);
                 } else if (event.key === "ArrowRight") {
                     angle0.value = 0;
-
-                    operationCommand = [{
-                        "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
-                    }];
-
                     sendCommands( operationCommand);
                 } else if (event.key === "ArrowLeft") {
                     angle0.value = 0;
-
-                    operationCommand = [{
-                        "operation" : "set_direction",
-                        "angle" : Number( angle0.value)
-                    }];
-
                     sendCommands( operationCommand);
                 }
             })
