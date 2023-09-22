@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+        <script>
+            // Create a client instance
+            client = new Paho.MQTT.Client( "10.135.90.173", 1883, "webid");
+
+            // set callback handlers
+            client.onConnectionLost = onConnectionLost;
+            client.onMessageArrived = onMessageArrived;
+
+            // connect the client
+            client.connect({onSuccess:onConnect});
+
+            // called when the client connects
+            function onConnect() {
+                // Once a connection has been made, make a subscription and send a message.
+                console.log("onConnect");
+                client.subscribe("state");
+            }
+
+            // called when the client loses its connection
+            function onConnectionLost(responseObject) {
+                if (responseObject.errorCode !== 0) {
+                    console.log( "onConnectionLost:" + responseObject.errorMessage);
+                }
+            }
+
+            // called when a message arrives
+            function onMessageArrived(message) {
+                console.log( "onMessageArrived:" + message.payloadString);
+            }       
+        </script>
+
+        <img src="http://10.135.90.173:9000/mjpg"></img>
+        <div class="slidecontainer">
+            <label>Direction</label>
+            <input type="range" min="-30" max="30" value="0" class="slider" id="angle0">
+            <label>Speed</label>
+            <input type="range" min="-50" max="50" value="0" class="slider" id="angle1">
+            <label>Rotate Head</label>
+            <input type="range" min="-45" max="45" value="0" class="slider" id="angle2">
+            <label>Tilt Head</label>
+            <input type="range" min="-45" max="45" value="0" class="slider" id="angle3">
+        </div>
+        <div class="tts"><input id="ttstext" type="text"><input id="ttsbutton" type="button" value="Say"></div>
+        <script>
+            let angle0 = document.getElementById('angle0');
+            let angle1 = document.getElementById('angle1');
+            let angle2 = document.getElementById('angle2');
+            let angle3 = document.getElementById('angle3');
+            let ttstext = document.getElementById('ttstext');
+            let ttsbutton = document.getElementById('ttsbutton');
+
+            function onDirectionChanged() {
+                var command = [{ 
+                    "operation" : "set_direction", 
+                    "angle" : Number( angle0.value)
+                }];
+
+                sendCommands( command);
+            }
+
+            function onSpeedChanged() {
+                var command = [{
+                    "operation" : "set_speed",
+                    "speed" : Number( angle1.value)
+                }];
+
+                sendCommands( command);
+            }
+
+            function onHeadRotate() {
+                var command = [{ 
+                    "operation" : "set_head_rotate", 
+                    "angle" : Number( angle2.value)
+                }];
+
+                sendCommands( command);
+            }
+
+            function onHeadTilt() {
+                var command = [{ 
+                    "operation" : "set_head_tilt", 
+                    "angle" : Number( angle3.value)
+                }];
+
+                sendCommands( command);
+            }
+
+            function say() {
+                var command = [{ 
+                    "operation" : "say", 
+                    "text" : ttstext.value
+                }];
+
+                sendCommands( command);
+            }
+
+            function sendCommands( command) {
+                var json = JSON.stringify( command);
+                console.log( "Message : " + json);
+
+                message = new Paho.MQTT.Message( json);
+                message.destinationName = "command";
+
+                client.send( message);
+            }
+
+            angle0.oninput = onDirectionChanged;
+            angle1.oninput = onSpeedChanged;
+            angle2.oninput = onHeadRotate;
+            angle3.oninput = onHeadTilt;
+ 
+            ttsbutton.onclick = say;
+         </script>
+    </body>
+</html>

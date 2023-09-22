@@ -1,0 +1,25 @@
+.slidecontainer {
+    width: 50%;
+    margin: auto;
+}
+
+.slidecontainer input {
+    width: 100%;
+}
+
+img {
+    display: block;
+    width: 30%;
+    margin: auto;
+}
+
+.tts {
+    width: fit-content;
+    margin: auto;
+}
+
+.tts #ttstext {
+    width: 300px;
+    margin-top: 20px;
+    margin-right: 10px;
+}
