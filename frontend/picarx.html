@@ -73,7 +73,7 @@
             <label>Tilt Head</label>
             <input type="range" min="-45" max="45" value="0" class="slider" id="angle3">
         </div>
-        <div class="tts"><input id="ttstext" type="text"><input id="ttsbutton" type="button" value="Say"><input id="playsong" type="button" value="Play song"></div>
+        <div class="tts"><input id="ttstext" type="text"><input id="ttsbutton" type="button" value="Say"><input id="playentli" type="button" value="Play Entli"><input id="playoops" type="button" value="Play Oops"></div>
         <script>
             let angle0 = document.getElementById('angle0');
             let angle1 = document.getElementById('angle1');
@@ -81,7 +81,8 @@
             let angle3 = document.getElementById('angle3');
             let ttstext = document.getElementById('ttstext');
             let ttsbutton = document.getElementById('ttsbutton');
-            let playsong = document.getElementById('playsong');
+            let playentli = document.getElementById('playentli');
+            let playoops = document.getElementById('playoops');
 
             document.addEventListener('keydown', (event) => {
                 let directionCommand;
@@ -215,10 +216,19 @@
                 sendCommands( command);
             }
 
-            function play_song() {
+            function playEntli() {
                 var command = [{
                     "operation" : "play_song",
                     "song" : "entli"
+                }];
+
+                sendCommands( command);
+            }
+
+            function playOops() {
+                var command = [{
+                    "operation" : "play_song",
+                    "song" : "oops"
                 }];
 
                 sendCommands( command);
@@ -240,7 +250,8 @@
             angle3.oninput = onHeadTilt;
 
             ttsbutton.onclick = say;
-            playsong.onclick = play_song;
+            playentli.onclick = playEntli;
+            playoops.onclick = playOops;
          </script>
     </body>
 </html>

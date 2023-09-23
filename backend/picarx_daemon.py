@@ -1,10 +1,11 @@
 from vilib import Vilib
 from picarx import Picarx
-from robot_hat import Buzzer, TTS, Music
+from robot_hat import TTS
 import time
 import paho.mqtt.client as mqtt
 import json
-from threading import Lock, Thread
+from threading import Lock
+from sound_player import SoundPlayer
 
 last_command = 0
 
@@ -38,7 +39,7 @@ def on_message(client, userdata, msg):
             elif operation == 'say':
                 cmd_say( command)
             elif operation == 'play_song':
-                play_song(command)
+                cmd_play_song(command)
             else:
                 print('Unknown command')
 
@@ -55,42 +56,11 @@ client.on_message = on_message
 
 client.connect("localhost", 1883, 60)
 
-def play_song(command):
+def cmd_play_song(command):
     song = command['song']
 
     player = SoundPlayer(song)
     player.start()
-
-class SoundPlayer(Thread):
-    def __init__(self, song):
-        self.song = song
-
-    def run(self):
-        match self.song:
-            case 'entli':
-                notes = [("Middle C", 1), ("Middle D", 1), ("Middle E", 1), ("Middle F", 1),
-                        ("Middle G", 2),                  ("Middle G", 2),
-                        ("Middle A", 1), ("Middle A", 1), ("Middle A", 1), ("Middle A", 1),
-                        ("Middle G", 4),
-                        ("Middle A", 1), ("Middle A", 1), ("Middle A", 1), ("Middle A", 1),
-                        ("Middle G", 4),
-                        ("Middle F", 1), ("Middle F", 1), ("Middle F", 1), ("Middle F", 1),
-                        ("Middle E", 2),                  ("Middle E", 2),
-                        ("Middle D", 1), ("Middle D", 1), ("Middle D", 1), ("Middle D", 1),
-                        ("Middle C", 4)]
-            case _:
-                notes = [("Middle F", 1), ("Middle E", 1), ("Middle D#", 1),
-                         ("Middle D", 3)]
-
-        self.play(notes, tempo=120)
-
-    def play(self, notes, tempo):
-        m = Music()
-        buzzer = Buzzer("P0")
-        m.tempo(tempo)
-
-        for note in notes:
-            buzzer.play(m.note(note[0]), m.beat(note[1]))
 
 def cmd_say( command):
     text = command['text']
