@@ -37,7 +37,31 @@
             }
         </script>
 
-        <img src="http://4.221.188.68:9000/mjpg"></img>
+<!--        <img src="http://4.221.188.68:9000/mjpg"></img>-->
+<!--        <video data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd" controls></video>-->
+        <video id="video1" controls="controls"></video>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var player;
+                var MPD = 'https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd';
+                var settings = {
+                    streaming: {
+                        // delay: {
+                        //     liveDelay: 10
+                        // },
+                        liveCatchup: {
+                            enabled: true
+                        }
+                    }
+                }
+
+                var video = document.querySelector('#video1');
+                player = dashjs.MediaPlayer().create();
+                player.initialize(video, MPD, true);
+                player.updateSettings(settings);
+            });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.1/dash.all.min.js"></script>
         <div class="slidecontainer">
             <label>Direction</label>
             <input type="range" min="-30" max="30" value="0" class="slider" id="angle0">
