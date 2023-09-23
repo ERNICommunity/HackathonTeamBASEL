@@ -38,12 +38,13 @@
         </script>
 
 <!--        <img src="http://4.221.188.68:9000/mjpg"></img>-->
-<!--        <video data-dashjs-player autoplay src="https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd" controls></video>-->
+<!--        <video data-dashjs-player autoplay src="http://4.221.188.68/live/picamera.mpd" controls></video>-->
         <video id="video1" controls="controls"></video>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 var player;
-                var MPD = 'https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd';
+                var MPD = 'http://4.221.188.68/live/picamera.mpd';
+                // var MPD = 'https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd';
                 var settings = {
                     streaming: {
                         // delay: {
