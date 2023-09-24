@@ -1,3 +1,54 @@
+.header {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 50px;
+    border-bottom: 1px solid grey;
+    margin-bottom: 10px;
+    gap: 50px;
+}
+
+.header-text-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-self: center;
+    align-items: center;
+    border-left: 1px solid grey;
+}
+
+.header-text {
+    display: flex;
+    justify-content: flex-start;
+    align-self: center;
+    align-items: center;
+    color: #515455;
+    font-size: 32px;
+    font-family: serif;
+    font-weight: 700;
+    line-height: 22px;
+}
+
+.github-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    align-self: center;
+    cursor: pointer;
+}
+
+.github-text {
+    width: 149px;
+    margin-right: 5px;
+    color: #515455;
+    font-size: 18px;
+    font-family: serif;
+    font-weight: 700;
+    line-height: 22px;
+}
+
 .slidecontainer {
     width: 50%;
     margin: auto;
