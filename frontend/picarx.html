@@ -1,333 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
 	<title>B.A.S.E.L. ERNI Global Hackathon 2023 Robot Interface</title>
-        <link href="styles.css" rel="stylesheet">
-    </head>
-    <body>
-    <div class="header">
-        <img src="images/erni-logo.svg" alt="" style="width: 140px; height: 70px">
-        <div class="header-text-container">
-            <div class="header-text" title="oneERNI Global Hackathon 2023">Hackathon 2023</div>
-            <img src="images/code-logo.svg" alt="" style="width: 60px; height: 60px">
-            <div class="header-text" title="Team B.A.S.E.L (Best Available Software Engineering Legends)">Team B.A.S.E.L</div>
-        </div>
-        <div class="github-container" onclick="openGitHubRepo()">
-            <div class="github-text">GitHub-Repository</div>
-            <img src="images/github-logo.svg" alt="" style="width: 40px; height: 40px">
-        </div>
-        <script>
-            function openGitHubRepo() {
-                parent.open("https://github.com/ERNICommunity/HackathonTeamBASEL.git");
-            }
-        </script>
-    </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
-        <script>
-            // Create a client instance
-            client = new Paho.MQTT.Client( window.location.host, 9001, "webid");
+	<link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="header">
+	<img alt="" src="images/erni-logo.svg" style="width: 140px; height: 70px">
+	<div class="header-text-container">
+		<div class="header-text" title="oneERNI Global Hackathon 2023">Hackathon 2023</div>
+		<img alt="" src="images/code-logo.svg" style="width: 60px; height: 60px">
+		<div class="header-text" title="Team B.A.S.E.L (Best Available Software Engineering Legends)">Team B.A.S.E.L
+		</div>
+	</div>
+	<div class="github-container" onclick="openGitHubRepo()">
+		<div class="github-text">GitHub-Repository</div>
+		<img alt="" src="images/github-logo.svg" style="width: 40px; height: 40px">
+	</div>
+	<script>
+		function openGitHubRepo() {
+			parent.open("https://github.com/ERNICommunity/HackathonTeamBASEL.git");
+		}
+	</script>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+<script>
+	// Create a client instance
+	client = new Paho.MQTT.Client(window.location.host, 9001, "webid");
 
-            // set callback handlers
-            client.onConnectionLost = onConnectionLost;
-            client.onMessageArrived = onMessageArrived;
+	// set callback handlers
+	client.onConnectionLost = onConnectionLost;
+	client.onMessageArrived = onMessageArrived;
 
-            // connect the client
-            client.connect({onSuccess:onConnect});
+	// connect the client
+	client.connect({onSuccess: onConnect});
 
-            // called when the client connects
-            function onConnect() {
-                // Once a connection has been made, make a subscription and send a message.
-                console.log("onConnect");
-                client.subscribe("state");
-            }
+	// called when the client connects
+	function onConnect() {
+		// Once a connection has been made, make a subscription and send a message.
+		console.log("onConnect");
+		client.subscribe("state");
+	}
 
-            // called when the client loses its connection
-            function onConnectionLost(responseObject) {
-                if (responseObject.errorCode !== 0) {
-                    console.log( "onConnectionLost:" + responseObject.errorMessage);
-                }
-            }
+	// called when the client loses its connection
+	function onConnectionLost(responseObject) {
+		if (responseObject.errorCode !== 0) {
+			console.log("onConnectionLost:" + responseObject.errorMessage);
+		}
+	}
 
-            // called when a message arrives
-            function onMessageArrived(message) {
-                console.log( "onMessageArrived:" + message.payloadString);
-            }
-        </script>
-        <video id="video1" controls="controls"></video>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var player;
-                var MPD = 'http://4.221.188.68/live/picamera.mpd';
-                var settings = {
-                    streaming: {
-                        delay: {
-                            liveDelay: 0
-                        },
-                        liveCatchup: {
-                            enabled: true
-                        }
-                    }
-                }
+	// called when a message arrives
+	function onMessageArrived(message) {
+		console.log("onMessageArrived:" + message.payloadString);
+	}
+</script>
+<video controls="controls" id="video1"></video>
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		var player;
+		var MPD = 'http://4.221.188.68/live/picamera.mpd';
+		var settings = {
+			streaming: {
+				delay: {
+					liveDelay: 0
+				},
+				liveCatchup: {
+					enabled: true
+				}
+			}
+		}
 
-                var video = document.querySelector('#video1');
-                player = dashjs.MediaPlayer().create();
-                player.initialize(video, MPD, true);
-                player.updateSettings(settings);
-            });
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.1/dash.all.min.js"></script>
-    <div class=cable></div>
-    <div class=controller>
-        <div class="tts">
-            <input id="ttstext" type="text">
-            <input id="ttsbutton" title="press this button or the ENTER key on the keyboard to speak the written text out" type="button" class="tts-input" value="Say">
-        </div>
-        <div class=controller-left>
-            <div class=back-button-1-center>
-                <div class= "corner-left-1" title="Press the A key on the keyboard to rotate to left">
-                    <div class="corner-text">A</div>
-                </div>
-                <div class= "corner-right-1" title="Press the W key on the keyboard to tilt up">
-                    <div class="corner-text">W</div>
-                </div>
-            </div>
-            <div class=back-button-2-center>
-                <div class= "corner-left-2" title="Press the S key on the keyboard to tilt down">
-                    <div class="corner-text">S</div>
-                </div>
-                <div class= "corner-right-2" title="Press the D key on the keyboard to rotate to right">
-                    <div class="corner-text">D</div>
-                </div>
-            </div>
-        </div>
-        <div class=controller-right>
-            <div class=circle></div>
-            <div class=cross-center>
-                <div class="cross-top" title="Press the arrow up key on the keyboard to move forward">
-                    <div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
-                        <
-                    </div>
-                </div>
-                <div class="cross-bottom" title="Press the arrow down key on the keyboard to move back">
-                    <div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
-                        >
-                    </div>
-                </div>
-                <div class="cross-left" title="Press the arrow left key on the keyboard to move left">
-                    <div class="cross-text">
-                        <
-                    </div>
-                </div>
-                <div class="cross-right" title="Press the arrow right key on the keyboard to move right">
-                    <div class="cross-text">
-                        >
-                    </div>
-                </div>
-                <div class=cross-circle></div>
-            </div>
-        </div>
-    </div>
-    <div class="info-container">
-        <div class="info-container-header">Control Info</div>
-        <div class="info-container-content">
-            <div class="info-container-box" style="gap: 2px">
-                <div class="info-container-corner-item" style="margin-left: 5px">
-                    <div class= "corner-info" style="background-color: #6699FF">
-                        <div class="corner-text" style="transform: rotate(1.00turn)">W</div>
-                    </div>
-                    <div class="info-container-item-text">Tilt Head Up: keyboard W key</div>
-                </div>
-                <div class="info-container-corner-item" style="margin-left: 5px">
-                    <div class= "corner-info" style="background-color: #CFCF00">
-                        <div class="corner-text" style="transform: rotate(1.00turn)">S</div>
-                    </div>
-                    <div class="info-container-item-text">Tilt Head Down: keyboard S key</div>
-                </div>
-                <div class="info-container-corner-item" style="margin-left: 5px">
-                    <div class= "corner-info" style="background-color: #00B800">
-                        <div class="corner-text" style="transform: rotate(1.00turn)">A</div>
-                    </div>
-                    <div class="info-container-item-text">Rotate Head to Left: keyboard A key</div>
-                </div>
-                <div class="info-container-corner-item" style="margin-left: 5px">
-                    <div class= "corner-info" style="background-color: #7D230D">
-                        <div class="corner-text" style="transform: rotate(1.00turn)">D</div>
-                    </div>
-                    <div class="info-container-item-text">Rotate Head to Right: keyboard D key</div>
-                </div>
-            </div>
-            <div class="info-container-box" style="gap: 20px">
-                <div class="info-container-item" style="margin-left: 5px">
-                    <div class=cross-info>
-                        <div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
-                            <
-                        </div>
-                    </div>
-                    <div class="info-container-item-text">Move Forward: keyboard up arrow</div>
-                </div>
-                <div class="info-container-item" style="margin-left: 5px">
-                    <div class=cross-info>
-                        <div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
-                            >
-                        </div>
-                    </div>
-                    <div class="info-container-item-text">Move Back: keyboard down arrow</div>
-                </div>
-                <div class="info-container-item" style="margin-left: 5px">
-                    <div class=cross-info>
-                        <div class="cross-text">
-                            <
-                        </div>
-                    </div>
-                    <div class="info-container-item-text">Move Left: keyboard left arrow</div>
-                </div>
-                <div class="info-container-item" style="margin-left: 5px">
-                    <div class=cross-info>
-                        <div class="cross-text">
-                            >
-                        </div>
-                    </div>
-                    <div class="info-container-item-text">Move Right: keyboard right arrow</div>
-                </div>
-            </div>
-        </div>
-        <div class="info-container-item-text">Say Button: Write a text and press the button or ENTER key to speak the text out!</div>
-    </div>
-        <script>
-            let ttstext = document.getElementById('ttstext');
-            let ttsbutton = document.getElementById('ttsbutton');
+		var video = document.querySelector('#video1');
+		player = dashjs.MediaPlayer().create();
+		player.initialize(video, MPD, true);
+		player.updateSettings(settings);
+	});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/4.7.1/dash.all.min.js"></script>
+<div class=cable></div>
+<div class=controller>
+	<div class="tts">
+		<input id="ttstext" type="text">
+		<input class="tts-input" id="ttsbutton"
+			   title="press this button or the ENTER key on the keyboard to speak the written text out" type="button" value="Say">
+	</div>
+	<div class=controller-left>
+		<div class=back-button-1-center>
+			<div class="corner-left-1" title="Press the A key on the keyboard to rotate to left">
+				<div class="corner-text">A</div>
+			</div>
+			<div class="corner-right-1" title="Press the W key on the keyboard to tilt up">
+				<div class="corner-text">W</div>
+			</div>
+		</div>
+		<div class=back-button-2-center>
+			<div class="corner-left-2" title="Press the S key on the keyboard to tilt down">
+				<div class="corner-text">S</div>
+			</div>
+			<div class="corner-right-2" title="Press the D key on the keyboard to rotate to right">
+				<div class="corner-text">D</div>
+			</div>
+		</div>
+	</div>
+	<div class=controller-right>
+		<div class=circle></div>
+		<div class=cross-center>
+			<div class="cross-top" title="Press the arrow up key on the keyboard to move forward">
+				<div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
+					<
+				</div>
+			</div>
+			<div class="cross-bottom" title="Press the arrow down key on the keyboard to move back">
+				<div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
+					>
+				</div>
+			</div>
+			<div class="cross-left" title="Press the arrow left key on the keyboard to move left">
+				<div class="cross-text">
+					<
+				</div>
+			</div>
+			<div class="cross-right" title="Press the arrow right key on the keyboard to move right">
+				<div class="cross-text">
+					>
+				</div>
+			</div>
+			<div class=cross-circle></div>
+		</div>
+	</div>
+</div>
+<div class="info-container">
+	<div class="info-container-header">Control Info</div>
+	<div class="info-container-content">
+		<div class="info-container-box" style="gap: 2px">
+			<div class="info-container-corner-item" style="margin-left: 5px">
+				<div class="corner-info" style="background-color: #6699FF">
+					<div class="corner-text" style="transform: rotate(1.00turn)">W</div>
+				</div>
+				<div class="info-container-item-text">Tilt Head Up: keyboard W key</div>
+			</div>
+			<div class="info-container-corner-item" style="margin-left: 5px">
+				<div class="corner-info" style="background-color: #CFCF00">
+					<div class="corner-text" style="transform: rotate(1.00turn)">S</div>
+				</div>
+				<div class="info-container-item-text">Tilt Head Down: keyboard S key</div>
+			</div>
+			<div class="info-container-corner-item" style="margin-left: 5px">
+				<div class="corner-info" style="background-color: #00B800">
+					<div class="corner-text" style="transform: rotate(1.00turn)">A</div>
+				</div>
+				<div class="info-container-item-text">Rotate Head to Left: keyboard A key</div>
+			</div>
+			<div class="info-container-corner-item" style="margin-left: 5px">
+				<div class="corner-info" style="background-color: #7D230D">
+					<div class="corner-text" style="transform: rotate(1.00turn)">D</div>
+				</div>
+				<div class="info-container-item-text">Rotate Head to Right: keyboard D key</div>
+			</div>
+		</div>
+		<div class="info-container-box" style="gap: 20px">
+			<div class="info-container-item" style="margin-left: 5px">
+				<div class=cross-info>
+					<div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
+						<
+					</div>
+				</div>
+				<div class="info-container-item-text">Move Forward: keyboard up arrow</div>
+			</div>
+			<div class="info-container-item" style="margin-left: 5px">
+				<div class=cross-info>
+					<div class="cross-text" style="transform: rotate(0.25turn); margin-right: 10px">
+						>
+					</div>
+				</div>
+				<div class="info-container-item-text">Move Back: keyboard down arrow</div>
+			</div>
+			<div class="info-container-item" style="margin-left: 5px">
+				<div class=cross-info>
+					<div class="cross-text">
+						<
+					</div>
+				</div>
+				<div class="info-container-item-text">Move Left: keyboard left arrow</div>
+			</div>
+			<div class="info-container-item" style="margin-left: 5px">
+				<div class=cross-info>
+					<div class="cross-text">
+						>
+					</div>
+				</div>
+				<div class="info-container-item-text">Move Right: keyboard right arrow</div>
+			</div>
+		</div>
+	</div>
+	<div class="info-container-item-text">Say Button: Write a text and press the button or ENTER key to speak the text
+		out!
+	</div>
+</div>
+<script>
+	let ttstext = document.getElementById('ttstext');
+	let ttsbutton = document.getElementById('ttsbutton');
 
-            document.addEventListener('keydown', (event) => {
-                let directionCommand;
-                let SpeedCommand;
-                let rotateCommand;
-                let tiltCommand;
+	document.addEventListener('keydown', (event) => {
+		let directionCommand;
+		let SpeedCommand;
+		let rotateCommand;
+		let tiltCommand;
 
-                if (event.key === "ArrowRight") {
-                    directionCommand = [{
-                        "operation" : "set_direction",
-                        "angle" : Number( 30)
-                    }];
+		if (event.key === "ArrowRight") {
+			directionCommand = [{
+				"operation": "set_direction",
+				"angle": Number(30)
+			}];
 
-                    sendCommands( directionCommand);
-                } else if (event.key === "ArrowLeft") {
-                    directionCommand = [{
-                        "operation" : "set_direction",
-                        "angle" : Number( -30)
-                    }];
+			sendCommands(directionCommand);
+		} else if (event.key === "ArrowLeft") {
+			directionCommand = [{
+				"operation": "set_direction",
+				"angle": Number(-30)
+			}];
 
-                    sendCommands( directionCommand);
-                } else if (event.key === "ArrowUp") {
-                    SpeedCommand = [{
-                        "operation" : "set_speed",
-                        "speed" : Number( 50)
-                    }];
+			sendCommands(directionCommand);
+		} else if (event.key === "ArrowUp") {
+			SpeedCommand = [{
+				"operation": "set_speed",
+				"speed": Number(50)
+			}];
 
-                    sendCommands( SpeedCommand);
-                } else if (event.key === "ArrowDown") {
-                    SpeedCommand = [{
-                        "operation" : "set_speed",
-                        "speed" : Number( -50)
-                    }];
+			sendCommands(SpeedCommand);
+		} else if (event.key === "ArrowDown") {
+			SpeedCommand = [{
+				"operation": "set_speed",
+				"speed": Number(-50)
+			}];
 
-                    sendCommands( SpeedCommand);
-                } else if (event.key === "d") {
-                    rotateCommand = [{
-                        "operation" : "set_head_rotate",
-                        "angle" : Number( 45)
-                    }];
+			sendCommands(SpeedCommand);
+		} else if (event.key === "d") {
+			rotateCommand = [{
+				"operation": "set_head_rotate",
+				"angle": Number(45)
+			}];
 
-                    sendCommands( rotateCommand);
-                } else if (event.key === "a") {
-                    rotateCommand = [{
-                        "operation" : "set_head_rotate",
-                        "angle" : Number( -45)
-                    }];
+			sendCommands(rotateCommand);
+		} else if (event.key === "a") {
+			rotateCommand = [{
+				"operation": "set_head_rotate",
+				"angle": Number(-45)
+			}];
 
-                    sendCommands( rotateCommand);
-                } else if (event.key === "w") {
-                    tiltCommand = [{
-                        "operation" : "set_head_tilt",
-                        "angle" : Number( 45)
-                    }];
+			sendCommands(rotateCommand);
+		} else if (event.key === "w") {
+			tiltCommand = [{
+				"operation": "set_head_tilt",
+				"angle": Number(45)
+			}];
 
-                    sendCommands( tiltCommand);
-                } else if (event.key === "s") {
-                    tiltCommand = [{
-                        "operation" : "set_head_tilt",
-                        "angle" : Number( -45)
-                    }];
+			sendCommands(tiltCommand);
+		} else if (event.key === "s") {
+			tiltCommand = [{
+				"operation": "set_head_tilt",
+				"angle": Number(-45)
+			}];
 
-                    sendCommands( tiltCommand);
-                } else if (event.key === "Enter") {
-                    if (ttstext.value.length !== 0) {
-                        say();
-                    }
-                }
-            })
+			sendCommands(tiltCommand);
+		} else if (event.key === "Enter") {
+			if (ttstext.value.length !== 0) {
+				say();
+			}
+		}
+	})
 
-            document.addEventListener('keyup', (event) => {
-                let directionCommand = [{
-                    "operation" : "set_direction",
-                    "angle" : Number( 0)
-                }];
+	document.addEventListener('keyup', (event) => {
+		let directionCommand = [{
+			"operation": "set_direction",
+			"angle": Number(0)
+		}];
 
-                let SpeedCommand = [{
-                    "operation" : "set_speed",
-                    "speed" : Number( 0)
-                }];
+		let SpeedCommand = [{
+			"operation": "set_speed",
+			"speed": Number(0)
+		}];
 
-                let rotateCommand = [{
-                    "operation" : "set_head_rotate",
-                    "angle" : Number( 0)
-                }];
+		let rotateCommand = [{
+			"operation": "set_head_rotate",
+			"angle": Number(0)
+		}];
 
-                let tiltCommand = [{
-                    "operation" : "set_head_tilt",
-                    "angle" : Number( 0)
-                }];
+		let tiltCommand = [{
+			"operation": "set_head_tilt",
+			"angle": Number(0)
+		}];
 
-                if (event.key === "ArrowRight") {
-                    sendCommands( directionCommand);
-                } else if (event.key === "ArrowLeft") {
-                    sendCommands( directionCommand);
-                } else if (event.key === "ArrowUp") {
-                    sendCommands( SpeedCommand);
-                } else if (event.key === "ArrowDown") {
-                    sendCommands( SpeedCommand);
-                } else if (event.key === "d") {
-                    sendCommands( rotateCommand);
-                } else if (event.key === "a") {
-                    sendCommands( rotateCommand);
-                } else if (event.key === "w") {
-                    sendCommands( tiltCommand);
-                } else if (event.key === "s") {
-                    sendCommands( tiltCommand);
-                }
-            })
+		if (event.key === "ArrowRight") {
+			sendCommands(directionCommand);
+		} else if (event.key === "ArrowLeft") {
+			sendCommands(directionCommand);
+		} else if (event.key === "ArrowUp") {
+			sendCommands(SpeedCommand);
+		} else if (event.key === "ArrowDown") {
+			sendCommands(SpeedCommand);
+		} else if (event.key === "d") {
+			sendCommands(rotateCommand);
+		} else if (event.key === "a") {
+			sendCommands(rotateCommand);
+		} else if (event.key === "w") {
+			sendCommands(tiltCommand);
+		} else if (event.key === "s") {
+			sendCommands(tiltCommand);
+		}
+	})
 
-            function say() {
-                var command = [{
-                    "operation" : "say",
-                    "text" : ttstext.value
-                }];
+	function say() {
+		var command = [{
+			"operation": "say",
+			"text": ttstext.value
+		}];
 
-                ttstext.value = "";
+		ttstext.value = "";
 
-                sendCommands( command);
-            }
+		sendCommands(command);
+	}
 
-            function sendCommands( command) {
-                var json = JSON.stringify( command);
-                console.log( "Message : " + json);
+	function sendCommands(command) {
+		var json = JSON.stringify(command);
+		console.log("Message : " + json);
 
-                message = new Paho.MQTT.Message( json);
-                message.destinationName = "command";
+		message = new Paho.MQTT.Message(json);
+		message.destinationName = "command";
 
-                client.send( message);
-            }
+		client.send(message);
+	}
 
-            ttsbutton.onclick = say;
-         </script>
-    </body>
+	ttsbutton.onclick = say;
+</script>
+</body>
 </html>
